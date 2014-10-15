@@ -96,11 +96,22 @@
 # Copyright 2013 Tray Torrance, unless otherwise noted
 #
 define account(
-  $username = $title, $password = '!', $shell = '/bin/bash',
-  $manage_home = true, $home_dir = undef,  $home_dir_perms = '0750',
-  $create_group = true, $system = false, $uid = undef, $ssh_key = undef,
-  $ssh_key_type = 'ssh-rsa', $groups = [], $ensure = present,
-  $comment= "${title} Puppet-managed User", $gid = 'users', $allowdupe = false
+  $username       = $title,
+  $password       = '!',
+  $shell          = '/bin/bash',
+  $manage_home    = true,
+  $home_dir       = undef,
+  $home_dir_perms = '0750',
+  $create_group   = true,
+  $system         = false,
+  $uid            = undef,
+  $ssh_key        = undef,
+  $ssh_key_type   = 'ssh-rsa',
+  $groups         = [],
+  $ensure         = present,
+  $comment        = "${title} Puppet-managed User",
+  $gid            = 'users',
+  $allowdupe      = false
 ) {
 
   if $home_dir == undef {
@@ -165,24 +176,23 @@ define account(
     }
   }
 
-  user {
-    $title:
-      ensure     => $ensure,
-      name       => $username,
-      comment    => $comment,
-      uid        => $uid,
-      password   => $password,
-      shell      => $shell,
-      gid        => $primary_group,
-      groups     => $groups,
-      home       => $home_dir_real,
-      managehome => $manage_home,
-      system     => $system,
-      allowdupe  => $allowdupe,
+  user { '$title' :
+    ensure     => $ensure,
+    name       => $username,
+    comment    => $comment,
+    uid        => $uid,
+    password   => $password,
+    shell      => $shell,
+    gid        => $primary_group,
+    groups     => $groups,
+    home       => $home_dir_real,
+    managehome => $manage_home,
+    system     => $system,
+    allowdupe  => $allowdupe,
   }
 
   file {
-    "${title}_home":
+    "${title}_home" :
       ensure  => $dir_ensure,
       path    => $home_dir_real,
       owner   => $dir_owner,
@@ -208,5 +218,6 @@ define account(
         key     => $ssh_key,
     }
   }
+
 }
 
